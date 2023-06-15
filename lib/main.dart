@@ -11,7 +11,38 @@ class ExpensesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MyHomePage());
+    final ThemeData tema = ThemeData();
+
+    return MaterialApp(
+      home: const MyHomePage(),
+      theme: tema.copyWith(
+        colorScheme: tema.colorScheme.copyWith(
+          primary: Colors.purple,
+          secondary: Colors.amber,
+        ),
+        textTheme: tema.textTheme.copyWith(
+          titleLarge: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.purple
+          ),
+          bodySmall: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black
+          )
+        ),
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold
+          )
+        )
+      )
+    );
   }
 }
 
@@ -25,8 +56,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _transactions = [
-    Transaction(id: 't1', title: 'Novo Tênis de Corrida', value: 310.76, date: DateTime.now()),
-    Transaction(id: 't2', title: 'Conta de Luz #1', value: 211.30, date: DateTime.now()),
+    // Transaction(id: 't1', title: 'Novo Tênis de Corrida', value: 310.76, date: DateTime.now()),
+    // Transaction(id: 't2', title: 'Conta de Luz #1', value: 211.30, date: DateTime.now()),
   ];
 
   _addTransaction(String title, double value) {
@@ -40,6 +71,9 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
+    
+    Navigator.of(context).pop();
+
   }
 
   _openTransactionFormModal(context) {
@@ -47,10 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context, 
       builder: (_) {
         return TransactionForm(_addTransaction);
-    });
+      }
+    );
   }
   
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
