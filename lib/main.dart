@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:expenses/models/transaction.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/components/transaction_form.dart';
@@ -91,20 +93,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLandiscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    bool isLandiscape = mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: const Text('Despesas Pessoais'),
       actions: <Widget>[
+        if (isLandiscape)
+          IconButton(
+            icon: Icon(_showChart ? Icons.list : Icons.show_chart),
+            onPressed: () => {
+              setState(() {
+                _showChart = !_showChart;
+              })
+            },
+          ),
         IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context))
+          icon: const Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
+        ),
       ],
     );
-    final availableHeight = MediaQuery.of(context).size.height -
+    final availableHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -112,36 +124,25 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandiscape)
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Exibir Gráfico'),
-                    Switch(
-                      value: _showChart,
-                      onChanged: (value) {
-                        setState(() {
-                          _showChart = value;
-                        });
-                      },
-                    )
-                  ]),
             if (_showChart || !isLandiscape)
               SizedBox(
-                height: availableHeight * (isLandiscape ? 0.7 : 0.25),
+                height: availableHeight * (isLandiscape ? 0.8 : 0.25),
                 child: Chart(_recentTransactions),
               ),
             if (!_showChart || !isLandiscape)
               SizedBox(
-                height: availableHeight * 0.75,
+                height: availableHeight * 1,
                 child: TransactionList(_transactions, _removeTransaction),
               ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => _openTransactionFormModal(context)),
+      floatingActionButton: Platform.isIOS
+          ? const SizedBox()
+          : FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => _openTransactionFormModal(context),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

@@ -45,56 +45,63 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(children: <Widget>[
-          TextField(
-            controller: _titleController,
-            onSubmitted: (_) => _submitForm(),
-            decoration: const InputDecoration(
-              labelText: 'Título',
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 10 + MediaQuery.of(context).viewInsets.bottom
+          ),
+          child: Column(children: <Widget>[
+            TextField(
+              controller: _titleController,
+              onSubmitted: (_) => _submitForm(),
+              decoration: const InputDecoration(
+                labelText: 'Título',
+              ),
             ),
-          ),
-          TextField(
-            controller: _valueController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            onSubmitted: (_) => _submitForm(),
-            decoration: const InputDecoration(
-              labelText: 'Valor R\$',
+            TextField(
+              controller: _valueController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              onSubmitted: (_) => _submitForm(),
+              decoration: const InputDecoration(
+                labelText: 'Valor R\$',
+              ),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  'Data selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    'Data selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}',
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: _showDatePicker,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.purple,
+                TextButton(
+                  onPressed: _showDatePicker,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.purple,
+                  ),
+                  child: const Text('Selecionar data'),
                 ),
-                child: const Text('Selecionar data'),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              TextButton(
-                onPressed: _submitForm,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  onPressed: _submitForm,
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: const Text('Nova Transação'),
                 ),
-                child: const Text('Nova Transação'),
-              ),
-            ],
-          )
-        ]),
+              ],
+            )
+          ]),
+        ),
       ),
     );
   }
